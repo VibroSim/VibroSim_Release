@@ -1,0 +1,11 @@
+Release process
+---------------
+ * Check all repositories for uncommitted changes; make sure all repositories have appropriately tagged versions, and these versions have been used for testing.
+ * Publish LIMATIX and heatsim2 changes to github if possible
+ * Update VibroSim_COMSOL version in .prj file; commit; Build VibroSim_COMSOL .mltbx
+ * Build VibroSim_COMSOL docs -> update this repo
+ * Build VibroSim_Simulator docs -> update this repo
+ * Tag each repo with VibroSim_<VERSION> e.g. VibroSim_1.0.0 or VibroSim_1.0.0-rc2
+ * Run VibroSim_build_release script. 
+ * Manually add VibroSim_COMSOL .mltbx to generated archve
+ * Distribute archive as appropriate. 
