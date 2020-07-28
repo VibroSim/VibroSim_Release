@@ -1,0 +1,374 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>VibroSim Simulator &#8212; VibroSim 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial" href="tutorial.html" />
+    <link rel="prev" title="Welcome to VibroSim Simulator’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="vibrosim-simulator">
+<h1>VibroSim Simulator<a class="headerlink" href="#vibrosim-simulator" title="Permalink to this headline">¶</a></h1>
+<p>VibroSim Simulator is a set of tools to organize and facilitate
+simulating Vibrothermography testing using VibroSim.</p>
+<p>PLEASE NOTE THAT VIBROSIM MAY NOT HAVE BEEN ADEQUATELY
+VALIDATED, THE NUMBERS BUILT INTO IT ALMOST CERTAINLY
+DO NOT APPLY TO YOUR VIBROTHERMOGRAPHY PROCESS. ITS OUTPUT
+CANNOT BE TRUSTED AND IS NOT SUITABLE FOR ENGINEERING
+REQUIREMENTS WITHOUT APPLICATION- AND PROCESS-SPECIFIC
+VALIDATION.</p>
+<dl class="simple">
+<dt>VibroSim Simulator relies directly on the following packages:</dt><dd><ul class="simple">
+<li><p>VibroSim_COMSOL</p></li>
+<li><p>angled_friction_model</p></li>
+<li><p>crackclosuresim2</p></li>
+<li><p>VibroSim_WelderModel (if ultrasonic welder-base excitation
+is to be simulated)</p></li>
+<li><p>Limatix</p></li>
+</ul>
+</dd>
+</dl>
+<p>As such, it requires MATLAB, COMSOL, and Python. The COMSOL
+Structural Mechanics Module and COMSOL LiveLink for MATLAB
+are also necessary. The Python version must be at least 2.7
+(preferably 3.6 or newer)
+and should include the full IPython, Matplotlib, Numpy, Scipy
+stack as well as Pandas v0.17.1 or later. To build
+crackclosuresim2 you will also need the platform compiler
+for your Python version (see the crackclosuresim2 documentation
+for more information).</p>
+<p>The Git version control system and the GitPython bindings
+are strongly recommended as the best way to manage or contribute
+updates.</p>
+<p>While the current implementation uses COMSOL for vibration
+calculation and for heat flow evaluation, because of the
+modular nature of VibroSim it would be reasonably
+straightforward to re-implement those steps using other
+tools. The crack_heatflow package will perform COMSOL-free
+heat flow evaluation.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Make sure you have the commercial prerequisites (MATLAB; COMSOL with
+Structural Mechanics Module and LiveLink for MATLAB) installed
+and a scientific Python distribution (usually <a class="reference external" href="https://www.anaconda.com">Anaconda
+https://www.anaconda.com</a>) installed. See also the Windows Installation
+notes, below, if applicable.</p>
+<p>Like most the other VibroSim components, VibroSim_Simulator is
+a Python package. Use the usual Python process</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">build</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></code></p>
+</div></blockquote>
+<p>commands to install it. (If running Anaconda on Windows all these
+commands are from an Anaconda prompt)</p>
+<p>After installing VibroSim_Simulator using the above process,
+repeat the same process on the <code class="docutils literal notranslate"><span class="pre">angled_friction_model</span></code>,
+<code class="docutils literal notranslate"><span class="pre">limatix</span></code>, and <code class="docutils literal notranslate"><span class="pre">VibroSim_WelderModel</span></code> packages.</p>
+<p>Prior to installing the final package (<code class="docutils literal notranslate"><span class="pre">crackclosuresim2</span></code>)
+you need to make sure you have your “platform compiler”
+installed. Typically this is GCC on Linux (installed via your OS),
+XCode on Macintosh, and Visual C++ on Windows.</p>
+<p>The exact compiler versions on Windows are listed at
+<a class="reference external" href="https://wiki.python.org/moin/WindowsCompilers">https://wiki.python.org/moin/WindowsCompilers</a>
+The correct Windows compiler for Python 3.5-3.8 is Visual C++ 14.X
+and can be freely downloaded as “Build Tools for Visual Studio 2019”
+from
+<a class="reference external" href="https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019">https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019</a>
+When running the installer, be sure to install “C++ build tools” and
+ensure the latest versions of “MSVCv142 - VS 2019 C++ x64/x86 build tools”
+and “Windows 10 SDK” are checked.</p>
+<p>Once you have your platform compiler installed you can perform
+the usual <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> steps on the crackclosuresim2 package.</p>
+<p>The final installation step is to make the MATLAB scripts in the
+VibroSim_COMSOL package accessible. If a VibroSim_COMSOL .mltbx
+was included in your archive you can install it using MATLAB’s
+package manager. Otherwise you can set the <code class="docutils literal notranslate"><span class="pre">MATLABPATH</span></code> environment
+variable to point at the <code class="docutils literal notranslate"><span class="pre">VibroSim_COMSOL/m_files</span></code> subdirectory of
+the VibroSim_COMSOL archive.</p>
+<p>Once all the installation steps are complete, you can test VibroSim
+by running one of the examples. For example, in a terminal or
+Anaconda prompt from the examples/ folder of VibroSim_Simulator
+you could run the vibrosim_demo3 example by typing:
+<code class="docutils literal notranslate"><span class="pre">processtrak</span> <span class="pre">vibrosim_demo3.prx</span> <span class="pre">-a</span></code></p>
+<p>See the documentation below for more information on processtrak.</p>
+</div>
+<div class="section" id="windows-installation">
+<h2>Windows Installation<a class="headerlink" href="#windows-installation" title="Permalink to this headline">¶</a></h2>
+<p>Additional steps must be followed for this package to work on
+Windows.
+If COMSOL is to be used, the command line executables for COMSOL
+need to be added to the path. For COMSOL 5.4 these executables
+were installed to the following directory:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">C:\Program</span> <span class="pre">Files\COMSOL\COMSOL54\Multiphysics\bin\win64</span></code></p>
+</div></blockquote>
+<p>This directory needs to be added to the end of the <code class="docutils literal notranslate"><span class="pre">path</span></code>
+environment variable. Searching “environment variables” in the
+start menu is a good way to find where to make this edit. Path
+entries on Windows are usually separated with semicolons (;)
+but Windows 10 now has a convenient editor you can use to add
+additional entries without having to worry about separators.</p>
+</div>
+<div class="section" id="vibrosim-simulator-workflow">
+<h2>VibroSim Simulator Workflow<a class="headerlink" href="#vibrosim-simulator-workflow" title="Permalink to this headline">¶</a></h2>
+<p>The VibroSim simulator workflow splits the process of performing a
+VibroSim simulation into a sequence of steps. Each step can be run
+manually, but as the manual steps can be rather complicated we
+recommend the use of the ProcessTrak tool from the Limatix
+package to automate the execution of the steps.</p>
+<dl class="simple">
+<dt>The conceptual steps involved in a VibroSim simulation are:</dt><dd><ol class="arabic simple">
+<li><p>Creation of a geometric model</p></li>
+<li><p>Vibrational analysis</p></li>
+<li><p>Modeling of the vibrothermography excitation</p></li>
+<li><p>Prediction of heating power</p></li>
+<li><p>Modeling of the heat from the crack conducting through the
+material</p></li>
+</ol>
+</dd>
+</dl>
+</div>
+<div class="section" id="processtrak">
+<h2>ProcessTrak<a class="headerlink" href="#processtrak" title="Permalink to this headline">¶</a></h2>
+<p>ProcessTrak is a commandline tool from the Limatix package that is
+used to keep track of what has been performed in a multistep
+process. It is executed by typing <code class="docutils literal notranslate"><span class="pre">processtrak</span></code> at the command line.
+ProcessTrak is configured by an XML listing of input file steps in a
+<code class="docutils literal notranslate"><span class="pre">.prx</span></code> file.  Usually ProcessTrak is run referencing that <code class="docutils literal notranslate"><span class="pre">.prx</span></code> file
+followed by additional instructions for what is desired. For example</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">processtrak</span> <span class="pre">vibrosim_demo3.prx</span> <span class="pre">--status</span></code></p>
+</div></blockquote>
+<p>will list out the status of each step in the process for each input
+file.</p>
+<p>ProcessTrak is designed to process input data into output results. The
+input data is specified in the form of an XML “experiment log” (<code class="docutils literal notranslate"><span class="pre">.xlg</span></code>
+file). The experiment log specifies or references the various inputs.
+The first ProcessTrak step is always an implicit <code class="docutils literal notranslate"><span class="pre">copyinput</span></code> step
+which copies the input <code class="docutils literal notranslate"><span class="pre">.xlg</span></code> to an output “processed experiment log”
+(<code class="docutils literal notranslate"><span class="pre">.xlp</span></code>) file.  The processed experiment log is annotated with
+Provenance information, log output from the various processing steps,
+and the result data from each processing step. For example,</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">processtrak</span> <span class="pre">vibrosim_demo3.prx</span> <span class="pre">-s</span> <span class="pre">copyinput</span></code></p>
+</div></blockquote>
+<p>will run the implicit <code class="docutils literal notranslate"><span class="pre">copyinput</span></code> step on the input files listed in
+<code class="docutils literal notranslate"><span class="pre">vibrosim_demo3.prx</span></code>, generating an output <code class="docutils literal notranslate"><span class="pre">.xlp</span></code> file (the input <code class="docutils literal notranslate"><span class="pre">.xlg</span></code>
+is never touched).</p>
+</div>
+<div class="section" id="git-and-limatix-git">
+<h2>Git and Limatix-Git<a class="headerlink" href="#git-and-limatix-git" title="Permalink to this headline">¶</a></h2>
+<p>Having confidence in simulation output requires confidence that you
+executed the code you intended and confidence that you have a
+repeatable process. We recommend the use of Git and Limatix-Git
+to perform version management both on the scripts and parameters
+of the simulation and on the generated output from the simulation.
+This process will require having Git and GitPython installed.
+Limatix-Git is included in the Limatix installation.</p>
+<p>To start using the Limatix-Git process, entering</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">init</span></code></p>
+</div></blockquote>
+<p>in your simulation directory will create a new Git repository there.</p>
+<p>We recommend managing your simulation process with two branches:
+“master” which contains the scripts and instructions but no output,
+and “master_processed” which also includes processed output.
+(These two branches can of course themselves be branched as desired).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">limatix-git</span></code> program exists to help automate the process of
+committing changed scripts and simulation output to the proper
+branches. It is based on the assumption that the name of any
+branch intended to contain processed output ends with <code class="docutils literal notranslate"><span class="pre">_processed</span></code>.
+It operates on the principle that scripts, input data, etc. should
+be committed to the master branch, and processed output should be
+cross-referenced in the <code class="docutils literal notranslate"><span class="pre">.xlp</span></code> files.</p>
+<p>To add files to the unprocessed branch, check out that branch,
+run <code class="docutils literal notranslate"><span class="pre">limatix-git</span> <span class="pre">add</span> <span class="pre">-a</span></code> to stage files for commit, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">status</span></code>
+to verify only input files have been staged, and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code>
+to perform the commit.</p>
+<p>To add files to the processed branch, check out that branch, run
+<code class="docutils literal notranslate"><span class="pre">limatix-git</span> <span class="pre">add-processed</span> <span class="pre">-a</span></code> to stage files for commit, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">status</span></code>
+to verify only processed output has been staged, and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code> to
+perform the commit.</p>
+</div>
+<div class="section" id="comsol-based-vibrosim-workflow">
+<h2>COMSOL-based VibroSim Workflow<a class="headerlink" href="#comsol-based-vibrosim-workflow" title="Permalink to this headline">¶</a></h2>
+<p>The COMSOL-based VibroSim workflow follows roughly the conceptual
+steps listed above, but the model creation is nominally all done
+up-front (in reality the first few steps will be iterated to get
+the model where it needs to be).</p>
+<dl>
+<dt>The steps involved in a COMSOL-based VibroSim simulation are:</dt><dd><ol class="arabic simple">
+<li><p>Scripting COMSOL to create a geometric and physics model,
+including mounting, excitation position/couplant,
+vibration monitoring, and a healed internal boundary
+representing the crack,</p></li>
+<li><p>Vibration analysis of sample including:</p></li>
+</ol>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p>Modal analysis</p></li>
+<li><p>Spectrum verification</p></li>
+<li><p>Frequency response calculation</p></li>
+<li><p>Generation of time-domain response.</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Modeling of the vibrothermography excitation to evaluate
+response at the crack</p></li>
+<li><p>Prediction of heating power from response at the crack.</p></li>
+<li><p>Modeling of the heat from the crack conducting through the
+material to the surface.</p></li>
+</ol>
+</dd>
+</dl>
+</div>
+<div class="section" id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>ProcessTrak error: FileNotFoundError in procstepmatlab_execfunc:</dt><dd><ul class="simple">
+<li><p>The comsol binaries are not in the system path. Please add them to
+the command path.</p></li>
+</ul>
+</dd>
+<dt>Warning from MATLAB about dataguzzler-lib/matlab or dc_unitsparam:</dt><dd><ul class="simple">
+<li><p>These are expected and nothing to worry about</p></li>
+</ul>
+</dd>
+<dt>Error from Matlab: Undefined function or variable ‘InitializeVibroSimScript’.</dt><dd><ul class="simple">
+<li><p>This means VibroSim_COMSOL is not accessible from MATLAB. One way to
+make it accessible is to install the VibroSim_COMSOL.mltbx as a MATLAB
+add-on. Another way is to set the MATLABPATH environment variable to
+the VibroSim_COMSOL m_files subfolder.</p></li>
+</ul>
+</dd>
+<dt>Error from processtrak: pkg_resources.DistributionNotFound</dt><dd><ul class="simple">
+<li><p>This usually means that the processtrak script was installed by a
+different version of Python than the version of Python that is
+executing. Reinstall Limatix using your desired Python version.</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="building-the-vibrosim-simulator-documentation">
+<h2>Building the VibroSim_Simulator Documentation<a class="headerlink" href="#building-the-vibrosim-simulator-documentation" title="Permalink to this headline">¶</a></h2>
+<p>A rendered form of the VibroSim documentation is usually included
+in distributed VibroSim release archives. It can also be built using <a class="reference external" href="https://www.sphinx-doc.org/en/master/">Sphinx</a>. Documentation source code can be
+found in the <code class="docutils literal notranslate"><span class="pre">docs</span></code> folder. Instructions for how to install Sphinx can be
+found at their website.  Once Sphinx is installed an html version of the
+documentation can be built using the makefile in the <code class="docutils literal notranslate"><span class="pre">docs</span></code> folder:</p>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">html</span></code></p>
+<p>Sphinx can also be used to create .pdf documentation using Latex:</p>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">latexpdf</span></code></p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">VibroSim</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">VibroSim Simulator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#windows-installation">Windows Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vibrosim-simulator-workflow">VibroSim Simulator Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#processtrak">ProcessTrak</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#git-and-limatix-git">Git and Limatix-Git</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comsol-based-vibrosim-workflow">COMSOL-based VibroSim Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-the-vibrosim-simulator-documentation">Building the VibroSim_Simulator Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#summary-of-vibrosim-demo3-files">Summary of vibrosim_demo3 files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#listing-of-examples">Listing of Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processtrak_steps.html">ProcessTrak Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explog_parameters.html">Experiment log parameters</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to VibroSim Simulator’s documentation!</a></li>
+      <li>Next: <a href="tutorial.html" title="next chapter">Tutorial</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Iowa State University.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/README.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

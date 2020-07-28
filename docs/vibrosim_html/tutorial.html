@@ -1,0 +1,347 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Tutorial &#8212; VibroSim 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ProcessTrak Steps" href="processtrak_steps.html" />
+    <link rel="prev" title="VibroSim Simulator" href="README.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<p>Lets look in depth at <code class="docutils literal notranslate"><span class="pre">vibrosim_demo3</span></code> in the examples folder. This example
+has three files associated with it, <code class="docutils literal notranslate"><span class="pre">vibrosim_demo3.prx</span></code> (processing steps),
+<code class="docutils literal notranslate"><span class="pre">vibrosim_demo3.xlg</span></code> (parameter storage), and <code class="docutils literal notranslate"><span class="pre">vibrosim_demo3_comsol.m</span></code>
+(matlab file for creating the COMSOL model).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.prx</span></code> file contains the processing steps to be performed with the model.
+It is managed by the software tool called <code class="docutils literal notranslate"><span class="pre">processtrak</span></code>, a part of
+<code class="docutils literal notranslate"><span class="pre">Limatix</span></code>.</p>
+<p>Use the tool in the following way:</p>
+<p><code class="docutils literal notranslate"><span class="pre">processtrak</span> <span class="pre">&lt;args&gt;</span> <span class="pre">vibrosim_demo3.prx</span></code></p>
+<p>The following are possible arguments.</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-s</span> <span class="pre">&lt;steps&gt;</span></code> : Run only listed steps (multiple OK)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-a</span></code> : Run all steps</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-i</span></code> : Use ipython interactive mode to execute script</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">--needed</span></code><span class="classifier">Filter down steps and input files according to what “needs”</span></dt><dd><p>to be run – i.e. missing or out-of-order steps, etc. DOES NOT PERFORM
+PROVENANCE VERIFICATION</p>
+</dd>
+</dl>
+</li>
+</ol>
+<p>Running this command:</p>
+<p><code class="docutils literal notranslate"><span class="pre">processtrak</span> <span class="pre">--status</span> <span class="pre">vibrosim_demo3.prx</span></code></p>
+<p>produces the following output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Input</span> <span class="n">file</span><span class="p">:</span> <span class="n">vibrosim_demo3</span><span class="o">.</span><span class="n">xlg</span>
+<span class="o">---------------------------</span>
+           <span class="n">copyinput</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+         <span class="n">dummyoutput</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+          <span class="n">buildmodel</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+            <span class="n">runmodal</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+  <span class="n">synthetic_spectrum</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+     <span class="n">entersweepfreqs</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+ <span class="n">setsweepfrequencies</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+      <span class="n">sweep_analysis</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+      <span class="n">enterburstfreq</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+   <span class="n">setburstfrequency</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+      <span class="n">burst_analysis</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+<span class="n">eval_closure_state_from_tip_positions</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+<span class="n">calc_heating_singlefrequency</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+   <span class="n">heatflow_analysis</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+</pre></div>
+</div>
+<p>None of the steps have been run yet, so they all have the same <code class="docutils literal notranslate"><span class="pre">NOT_EXECUTED</span></code>
+and <code class="docutils literal notranslate"><span class="pre">NEEDED</span></code> tags.</p>
+<p>Now we can run the first step with the following command:</p>
+<p><code class="docutils literal notranslate"><span class="pre">processtrak</span> <span class="pre">vibrosim_demo3.prx</span> <span class="pre">-s</span> <span class="pre">copyinput</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Processing</span> <span class="n">step</span> <span class="n">copyinput</span> <span class="n">on</span> <span class="n">vibrosim_demo3</span><span class="o">.</span><span class="n">xlg</span><span class="o">-&gt;</span><span class="n">vibrosim_demo3</span><span class="o">.</span><span class="n">xlp</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">processtrak</span> <span class="pre">--status</span> <span class="pre">vibrosim_demo3.prx</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Input</span> <span class="n">file</span><span class="p">:</span> <span class="n">vibrosim_demo3</span><span class="o">.</span><span class="n">xlg</span>
+<span class="o">---------------------------</span>
+           <span class="n">copyinput</span>     <span class="mi">2020</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">18</span><span class="n">T13</span><span class="p">:</span><span class="mi">48</span><span class="p">:</span><span class="mf">49.707642</span><span class="o">-</span><span class="mi">05</span><span class="p">:</span><span class="mi">00</span>
+         <span class="n">dummyoutput</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+          <span class="n">buildmodel</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+            <span class="n">runmodal</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+  <span class="n">synthetic_spectrum</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+     <span class="n">entersweepfreqs</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+ <span class="n">setsweepfrequencies</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+      <span class="n">sweep_analysis</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+      <span class="n">enterburstfreq</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+   <span class="n">setburstfrequency</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+      <span class="n">burst_analysis</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+<span class="n">eval_closure_state_from_tip_positions</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+<span class="n">calc_heating_singlefrequency</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+   <span class="n">heatflow_analysis</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+</pre></div>
+</div>
+<p>Now that the <code class="docutils literal notranslate"><span class="pre">copyinput</span></code> step has been executed, it is no longer <code class="docutils literal notranslate"><span class="pre">needed</span></code>
+and the timestamp of the step has been recorded. This data is kept in the
+<code class="docutils literal notranslate"><span class="pre">.xlp</span></code> file.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">copyinput</span></code> step is always present and represents a near verbatim copy of
+the unprocessed <code class="docutils literal notranslate"><span class="pre">.xlg</span></code> experiment log to a “processed” <code class="docutils literal notranslate"><span class="pre">.xlp</span></code> experiment log. The only initial difference is the addition of provenance (step execution) information to the <code class="docutils literal notranslate"><span class="pre">.xlp</span></code>.  Subsequent steps will operate on the <code class="docutils literal notranslate"><span class="pre">.xlp</span></code> adding processed results and hyperlinks to generated output files. If you make minor changes to the <code class="docutils literal notranslate"><span class="pre">.xlg</span></code> and want to merge those changes into the <code class="docutils literal notranslate"><span class="pre">.xlp</span></code> without wiping all of the generated output you can run the <code class="docutils literal notranslate"><span class="pre">mergeinput</span></code> step instead of <code class="docutils literal notranslate"><span class="pre">copyinput</span></code>.</p>
+<p>The steps (except for <code class="docutils literal notranslate"><span class="pre">copyinput</span></code> / <code class="docutils literal notranslate"><span class="pre">mergeinput</span></code>) are specified in the <code class="docutils literal notranslate"><span class="pre">.prx</span></code> file. When you run a step, it uses parameters explicitly specified in the <code class="docutils literal notranslate"><span class="pre">.prx</span></code> step definition as well as implicitly identifying the remaining paramters from the <code class="docutils literal notranslate"><span class="pre">.xlp</span></code> experiment log. The step then returns values which are added to the experiment log. The parameters and returns are documented in the “ProcessTrak Steps” chapter below.</p>
+<p>The next step is the <code class="docutils literal notranslate"><span class="pre">dummyoutput</span></code> step. The heat flow portion of the COMSOL model requires a heat distribution input in order to successfully build the model. The <code class="docutils literal notranslate"><span class="pre">dummyoutput</span></code> step creates a heat distribution that is zero to satisfy COMSOL. You can run this step with:</p>
+<p><code class="docutils literal notranslate"><span class="pre">processtrak</span> <span class="pre">vibrosim_demo3.prx</span> <span class="pre">-s</span> <span class="pre">dummyoutput</span></code></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">dummyoutput</span></code> step in the <code class="docutils literal notranslate"><span class="pre">.prx</span></code> file is specifed as:</p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;prx:script</span> <span class="pre">name=&quot;vibrocomsol_createdummyoutput.py&quot;/&gt;</span></code></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">name=</span></code> attribute means to search for this script in the processtrak
+search path (if you wanted to provide an explicit path you would use
+<code class="docutils literal notranslate"><span class="pre">xlink:href=</span></code> instead). This particular script is installed by the
+<code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> package and its source is in the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator/pt_steps</span></code> subdirectory. As documented below, it takes two parameters from the experiment log: <code class="docutils literal notranslate"><span class="pre">dc:dest</span></code> – the results output location – and <code class="docutils literal notranslate"><span class="pre">dc:measident</span></code> the identifier of the particular simulation run. It then returns (adds to the processed experiment log) <code class="docutils literal notranslate"><span class="pre">dc:dummy_heatingdata</span></code>, which is a hyperlink
+(following the <a class="reference external" href="https://www.w3.org/TR/xlink11/">XLink standard</a>) to the
+generated dummy heating input file for COMSOL. If you view the <code class="docutils literal notranslate"><span class="pre">.xlp</span></code> file
+in a text or XML editor after running this step you should be able to find the new
+<code class="docutils literal notranslate"><span class="pre">dc:dummy_heatingdata</span></code> element. The <code class="docutils literal notranslate"><span class="pre">dc:dummy_heatingdata</span></code> element will be used as a parameter by the <code class="docutils literal notranslate"><span class="pre">buildmodel</span></code> step indicating where the initial heating data is stored.</p>
+<p>Steps can be written in Python <code class="docutils literal notranslate"><span class="pre">.py</span></code>, MATLAB <code class="docutils literal notranslate"><span class="pre">.m</span></code>, or MATLAB/COMSOL <code class="docutils literal notranslate"><span class="pre">_comsol.m</span></code>. The next step is <code class="docutils literal notranslate"><span class="pre">buildmodel</span></code>, which is a custom MATLAB/COMSOL script (referenced explicitly by <code class="docutils literal notranslate"><span class="pre">xlink:href=</span></code> instead of being found in the search path). The <code class="docutils literal notranslate"><span class="pre">_comsol</span></code> portion of the filename is important because it tells ProcessTrak to run the MATLAB script in the COMSOL environment.</p>
+<p>NOTE: When running a COMSOL step for the first time it is common for it to ask for a username and password. These are just for communication between the COMSOL server and client on your own computer and they are remembered automatically so they do not really matter, but they might be worth writing down. Do not re-use an important password for the COMSOL server.</p>
+<p>Parameters expected by a MATLAB or MATLAB/COMSOL step are listed in the commented first line of the file, similar to how they would be defined for a MATLAB function. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span> <span class="n">function</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">vibrosim_demo3_comsol</span><span class="p">(</span><span class="n">dc_dest_href</span><span class="p">,</span><span class="n">dc_measident_str</span><span class="p">,</span><span class="n">dc_dummy_heatingdata_href</span><span class="p">,</span><span class="n">dc_amplitude_float</span><span class="p">,</span><span class="n">dc_staticload_mount_float</span><span class="p">,</span><span class="n">dc_spcmaterial_str</span><span class="p">,</span><span class="n">dc_YoungsModulus_float</span><span class="p">,</span> <span class="n">dc_YieldStrength_float</span><span class="p">,</span> <span class="n">dc_PoissonsRatio_float</span><span class="p">,</span> <span class="n">dc_Density_float</span><span class="p">,</span><span class="n">dc_spcThermalConductivity_float</span><span class="p">,</span> <span class="n">dc_spcSpecificHeatCapacity_float</span><span class="p">,</span><span class="n">dc_spcrayleighdamping_alpha_float</span><span class="p">,</span><span class="n">dc_spcrayleighdamping_beta_float</span><span class="p">,</span> <span class="n">dc_exc_t0_float</span><span class="p">,</span> <span class="n">dc_exc_t4_float</span><span class="p">,</span> <span class="n">dc_simulationcameranetd_float</span><span class="p">,</span><span class="n">dc_cracksemimajoraxislen_float</span><span class="p">,</span><span class="n">dc_cracksemiminoraxislen_float</span><span class="p">,</span><span class="n">dc_crack_type_side1_str</span><span class="p">,</span><span class="n">dc_crack_type_side2_str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The third parameter <code class="docutils literal notranslate"><span class="pre">dc_dummy_heatingdata_href</span></code> instructs ProcessTrak to find a entry <code class="docutils literal notranslate"><span class="pre">dc:dummy_heatingdata</span></code> in the processed experiment log (<code class="docutils literal notranslate"><span class="pre">.xlp</span></code>), to interpret it as a hypertext reference (<code class="docutils literal notranslate"><span class="pre">xlink:href</span></code>) and store the value in the MATLAB variable <code class="docutils literal notranslate"><span class="pre">dc_dummy_heatingdata_href</span></code>. Parameters to Python steps work similarly and are defined by the parameters to the <code class="docutils literal notranslate"><span class="pre">run()</span></code> function within the step.</p>
+<p>Steps can be run in interactive mode with the <code class="docutils literal notranslate"><span class="pre">-i</span></code> option to <code class="docutils literal notranslate"><span class="pre">processtrak</span></code>.
+<code class="docutils literal notranslate"><span class="pre">processtrak</span> <span class="pre">vibrosim_demo3.prx</span> <span class="pre">-s</span> <span class="pre">buildmodel</span> <span class="pre">-i</span></code></p>
+<p>This will cause the step to execute up to any errors or completion
+and leave an interactive environment. You can then evaluate
+variables, copy/paste code, etc. In MATLAB you can rerun the script
+just by typing its name. For COMSOL/MATLAB steps you can also externally
+run <code class="docutils literal notranslate"><span class="pre">comsol</span> <span class="pre">mphclient</span></code> and use the “Connect to Server” option to interact
+graphically with the COMSOL model. When you are done, type <code class="docutils literal notranslate"><span class="pre">eval(retcommand)</span></code> (MATLAB) or press Ctrl-D (Python) to store the step output and move on.</p>
+<p>The generated output from a COMSOL/MATLAB step will usually be saved in the <code class="docutils literal notranslate"><span class="pre">_output</span></code> subdirectory. You can load generated <code class="docutils literal notranslate"><span class="pre">.mph</span></code> files directly into the COMSOL GUI. In some cases temporary output <code class="docutils literal notranslate"><span class="pre">.mph</span></code> files are left under the system temporary directory (usually <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> or <code class="docutils literal notranslate"><span class="pre">c:\temp</span></code>) with only reprocessed output stored in the <code class="docutils literal notranslate"><span class="pre">_output</span></code> subdirectory.</p>
+<p>Steps can be run out of order, as long as the <code class="docutils literal notranslate"><span class="pre">.xlp</span></code> has everything that is needed for the step. If needed inputs are not present, the step will fail. Obviously running steps out of order can cause inconsistencies in the final results if you are not careful.</p>
+<p><code class="docutils literal notranslate"><span class="pre">processtrak</span> <span class="pre">vibrosim_demo3.prx</span> <span class="pre">-s</span> <span class="pre">entersweepfreqs</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">processtrak</span> <span class="pre">--status</span> <span class="pre">vibrosim_demo3.prx</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Input</span> <span class="n">file</span><span class="p">:</span> <span class="n">vibrosim_demo3</span><span class="o">.</span><span class="n">xlg</span>
+<span class="o">---------------------------</span>
+           <span class="n">copyinput</span>     <span class="mi">2020</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">18</span><span class="n">T13</span><span class="p">:</span><span class="mi">48</span><span class="p">:</span><span class="mf">49.707642</span><span class="o">-</span><span class="mi">05</span><span class="p">:</span><span class="mi">00</span>
+         <span class="n">dummyoutput</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+          <span class="n">buildmodel</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+            <span class="n">runmodal</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+  <span class="n">synthetic_spectrum</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+ <span class="n">entersweepfreqs</span>     <span class="mi">2020</span><span class="o">-</span><span class="mi">06</span><span class="o">-</span><span class="mi">18</span><span class="n">T13</span><span class="p">:</span><span class="mi">53</span><span class="p">:</span><span class="mf">03.368990</span><span class="o">-</span><span class="mi">05</span><span class="p">:</span><span class="mi">00</span>  <span class="n">FAILURE</span> <span class="n">NEEDED</span>
+ <span class="n">setsweepfrequencies</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+      <span class="n">sweep_analysis</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+      <span class="n">enterburstfreq</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+   <span class="n">setburstfrequency</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+      <span class="n">burst_analysis</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+<span class="n">eval_closure_state_from_tip_positions</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+<span class="n">calc_heating_singlefrequency</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+   <span class="n">heatflow_analysis</span> <span class="n">NOT_EXECUTED</span> <span class="n">NEEDED</span>
+</pre></div>
+</div>
+<p>All steps will be run from scratch if the following command is run:</p>
+<p><code class="docutils literal notranslate"><span class="pre">processtrak</span> <span class="pre">vibrosim_demo3.prx</span> <span class="pre">-a</span></code></p>
+<p>All steps with the <code class="docutils literal notranslate"><span class="pre">NEEDED</span></code> flag will be run with the following command:</p>
+<p><code class="docutils literal notranslate"><span class="pre">processtrak</span> <span class="pre">vibrosim_demo3.prx</span> <span class="pre">-a</span> <span class="pre">--needed</span></code></p>
+<p>Once all of the steps have been run, you can see the final output
+(hyperlinked in vibrosim_demo3.xlp) by loading the heatflow
+COMSOL model <code class="docutils literal notranslate"><span class="pre">vibrosim_demo3_output/meas1_heating.mph</span></code>, opening
+the <code class="docutils literal notranslate"><span class="pre">Results</span></code> tree and looking at the <code class="docutils literal notranslate"><span class="pre">vibro_heating_plot</span></code>. You
+can drag the model around, select different times to view the heating,
+etc. There is also a snapshot of this plot that should be saved
+in <code class="docutils literal notranslate"><span class="pre">vibrosim_demo3_output/meas1_heating.png</span></code>.</p>
+<p>In general VibroSim saves output after each step. In many cases these
+are plots, .csv’s, etc.  All output is written in standard or text
+based formats where possible (sometimes compressed by default
+e.g. with bzip2) In addition, temporary COMSOL models are sometimes
+written to the system temporary directory (profile/AppData/Local/Temp
+on Windows) – these can occasionally be useful when troubleshooting.
+See the reference manual for more detailed information on individual
+step outputs.</p>
+</div>
+<div class="section" id="summary-of-vibrosim-demo3-files">
+<h1>Summary of vibrosim_demo3 files<a class="headerlink" href="#summary-of-vibrosim-demo3-files" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="vibrosim-demo3-prx">
+<h2><code class="docutils literal notranslate"><span class="pre">vibrosim_demo3.prx</span></code><a class="headerlink" href="#vibrosim-demo3-prx" title="Permalink to this headline">¶</a></h2>
+<p>Lists the set of steps to be run and lists the experiment logs (<code class="docutils literal notranslate"><span class="pre">.xlg</span></code>) on
+which those steps should be run.</p>
+</div>
+<div class="section" id="vibrosim-demo3-xlg">
+<h2><code class="docutils literal notranslate"><span class="pre">vibrosim_demo3.xlg</span></code><a class="headerlink" href="#vibrosim-demo3-xlg" title="Permalink to this headline">¶</a></h2>
+<p>A <code class="docutils literal notranslate"><span class="pre">.xlg</span></code> contains the unprocessed experiment log. <code class="docutils literal notranslate"><span class="pre">processtrak</span></code> is
+primarily a tool for processing data collected in an experiment, after all. It
+contains all the parameters necessary to start the simulation. The first step
+in a simulation is to copy the <code class="docutils literal notranslate"><span class="pre">.xlg</span></code> into a processed experiment log
+<code class="docutils literal notranslate"><span class="pre">.xlp</span></code> file. This new <code class="docutils literal notranslate"><span class="pre">.xlp</span></code> file contains all the parameters in the
+<code class="docutils literal notranslate"><span class="pre">.xlg</span></code>, all parameters and results of <code class="docutils literal notranslate"><span class="pre">processtrak</span></code> steps, and tracking
+information about when each step was run and if it completed properly.</p>
+<p><code class="docutils literal notranslate"><span class="pre">.xlg</span></code> files are <code class="docutils literal notranslate"><span class="pre">xml</span></code> based, meaning they are hierarchical in nature. It
+is a single <code class="docutils literal notranslate"><span class="pre">experiment</span></code> tag with multiple <code class="docutils literal notranslate"><span class="pre">measurement</span></code> tags. Parameters
+that are consistent for a number of simulations can be stored under the
+<code class="docutils literal notranslate"><span class="pre">experiment</span></code> tag, thus making them global. These parameters can be
+overwritten  in the <code class="docutils literal notranslate"><span class="pre">measurement</span></code> tags, allowing the user to run multiple
+simulations with slightly varying input parameters. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;dc:experiment xmlns:dc=&quot;http://limatix.org/datacollect&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; xmlns:dcv=&quot;http://limatix.org/dcvalue&quot; xmlns:prx=&quot;http://limatix.org/processtrak/processinginstructions&quot;&gt;
+    &lt;dc:measident&gt;meas1&lt;/dc:measident&gt; &lt;!-- measident is used as a filename prefix for the various output files generated --&gt;
+    &lt;dc:measurement&gt;
+        &lt;dc:measident&gt;meas1_direct_singlefreq&lt;/dc:measident&gt;
+        &lt;dc:heatcalctype&gt;singlefrequency&lt;/dc:heatcalctype&gt;
+        ...
+    &lt;/dc:measurement&gt;
+    &lt;dc:measurement&gt;
+        &lt;dc:measident&gt;meas1_via_weldercalc&lt;/dc:measident&gt;
+        &lt;dc:heatcalctype&gt;welder&lt;/dc:heatcalctype&gt;
+        ...
+    &lt;/dc:measurement&gt;
+&lt;/dc:experiment&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="vibrosim-demo3-comsol-m">
+<h2><code class="docutils literal notranslate"><span class="pre">vibrosim_demo3_comsol.m</span></code><a class="headerlink" href="#vibrosim-demo3-comsol-m" title="Permalink to this headline">¶</a></h2>
+<p>This file contains all instructions necessary to build the COMSOL model for use
+in VibroSim_Simulator. There are examples of this in the examples folder. In
+depth information about how these files work can be found in the documentation
+of the sister software package <code class="docutils literal notranslate"><span class="pre">VibroSim_COMSOL</span></code>.</p>
+</div>
+</div>
+<div class="section" id="listing-of-examples">
+<h1>Listing of Examples<a class="headerlink" href="#listing-of-examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>vibrosim_demo3.prx<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>This basic demonstration uses as an example a simple surface crack in a
+bar-shaped test specimen. It is programmed for broadband (sweep and tuned
+toneburst) excitation.</p>
+</div>
+<div class="section" id="vibrosim-demo3-crosscheck-prx">
+<h2>vibrosim_demo3_crosscheck.prx<a class="headerlink" href="#vibrosim-demo3-crosscheck-prx" title="Permalink to this headline">¶</a></h2>
+<p>This example, otherwise similar to <code class="docutils literal notranslate"><span class="pre">vibrosim_demo3.prx</span></code>, demonstrates cross checking the <code class="docutils literal notranslate"><span class="pre">calc_heating_singlefrequency</span></code> step against the combined <code class="docutils literal notranslate"><span class="pre">calc_singlefrequency_motion</span></code> and <code class="docutils literal notranslate"><span class="pre">calc_heating_welder</span></code> steps that together have the same effect. To perform the cross-checking, it demonstrates the use of sub-measurements and multiple <code class="docutils literal notranslate"><span class="pre">&lt;prx:elementmatch&gt;</span></code> criteria to operate different steps on different sub-measurements.</p>
+</div>
+<div class="section" id="vibrosim-demo4-prx">
+<h2>vibrosim_demo4.prx<a class="headerlink" href="#vibrosim-demo4-prx" title="Permalink to this headline">¶</a></h2>
+<p>This basic demonstration illustrates testing a simple edge crack in a bar. It is programmed
+for broadband (sweep and toneburst) excitation.</p>
+</div>
+<div class="section" id="cantilever-example-prx">
+<h2>cantilever_example.prx<a class="headerlink" href="#cantilever-example-prx" title="Permalink to this headline">¶</a></h2>
+<p>This basic demonstration tests a cantilever with one fixed end and a surface crack, excited with
+an ultrasonic welder.</p>
+</div>
+<div class="section" id="cantilever-example-viscousdamping-prx">
+<h2>cantilever_example_viscousdamping.prx<a class="headerlink" href="#cantilever-example-viscousdamping-prx" title="Permalink to this headline">¶</a></h2>
+<p>This example extends <code class="docutils literal notranslate"><span class="pre">cantilever_example.prx</span></code> with a more physically meaningful but more complicated damping model, including
+prediction of radiative vibration losses into the cantilever mount.</p>
+</div>
+<div class="section" id="complex-model-demo-prx">
+<h2>complex_model_demo.prx<a class="headerlink" href="#complex-model-demo-prx" title="Permalink to this headline">¶</a></h2>
+<p>This example demonstrates simulating a cracked gear. It demonstrates the use of the COMSOL CAD import module to load in a CAD
+cross-section profile to COMSOL that is revolved, mirrored, etc. and then meshed. The example uses ultrasonic welder excitation.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">VibroSim</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">VibroSim Simulator</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#summary-of-vibrosim-demo3-files">Summary of vibrosim_demo3 files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#vibrosim-demo3-prx"><code class="docutils literal notranslate"><span class="pre">vibrosim_demo3.prx</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vibrosim-demo3-xlg"><code class="docutils literal notranslate"><span class="pre">vibrosim_demo3.xlg</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vibrosim-demo3-comsol-m"><code class="docutils literal notranslate"><span class="pre">vibrosim_demo3_comsol.m</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#listing-of-examples">Listing of Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">vibrosim_demo3.prx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vibrosim-demo3-crosscheck-prx">vibrosim_demo3_crosscheck.prx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vibrosim-demo4-prx">vibrosim_demo4.prx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cantilever-example-prx">cantilever_example.prx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cantilever-example-viscousdamping-prx">cantilever_example_viscousdamping.prx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complex-model-demo-prx">complex_model_demo.prx</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="processtrak_steps.html">ProcessTrak Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explog_parameters.html">Experiment log parameters</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="README.html" title="previous chapter">VibroSim Simulator</a></li>
+      <li>Next: <a href="processtrak_steps.html" title="next chapter">ProcessTrak Steps</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Iowa State University.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/tutorial.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

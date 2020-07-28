@@ -1,0 +1,790 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>ProcessTrak Steps &#8212; VibroSim 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Experiment log parameters" href="explog_parameters.html" />
+    <link rel="prev" title="Tutorial" href="tutorial.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="processtrak-steps">
+<h1>ProcessTrak Steps<a class="headerlink" href="#processtrak-steps" title="Permalink to this headline">¶</a></h1>
+<p>The following are ProcessTrak steps that come with various components
+of VibroSim.  All parameters listed in these steps must be
+explicitly passed from the <code class="docutils literal notranslate"><span class="pre">.prx</span></code> file or found in the processed experiment
+log (<code class="docutils literal notranslate"><span class="pre">.xlp</span></code>) file. Parameters in the <code class="docutils literal notranslate"><span class="pre">.xlp</span></code> file can either
+come from the unprocessed experiment log (<code class="docutils literal notranslate"><span class="pre">.xlg</span></code>), or have been placed
+in the <code class="docutils literal notranslate"><span class="pre">.xlp</span></code> file as a return from one of the prior steps.</p>
+<dl class="py function">
+<dt id="vibrosim_synthetic_spectrum">
+<code class="sig-name descname">vibrosim_synthetic_spectrum</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrosim_synthetic_spectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ProcessTrak step will take the output of the modal analysis and
+calculate a spectrum. Each mode in the modal analysis is a peak in the
+spectrum, with the amplitude and bandwidth determined by the complex
+valued eigenfrequency.</p>
+<p>This ProcessTrak step is included in the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> software package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dc:modalfreqs</strong> – Frequencies of the eigenmodes.</p>
+</dd>
+<dt class="field-even">Return dc:modal_synthetic_spectrum</dt>
+<dd class="field-even"><p>Synthetic spectrum figure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrocomsol_runmodal_comsol">
+<code class="sig-name descname">vibrocomsol_runmodal_comsol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrocomsol_runmodal_comsol" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ProcessTrak step will open COMSOL, run the modal analysis study, and
+save the results.</p>
+<p>The purpose of the modal analysis is to identify candidate resonant modes
+of the specimen. In vibrothermography testing you want to excite enough
+resonant modes that you will be pretty much guaranteed that any point in
+the specimen will have large strains in at least one of the modes. The
+modal analysis can be used to find these resonances. In experiments, this
+would be performed using a broadband frequency sweep across the entire
+range of possible excitation frequencies.</p>
+<p>This ProcessTrak step is included in the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> software
+package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+<li><p><strong>dc:model_comsol</strong> – Save file for the COMSOL model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:modalcalc_comsol</dt>
+<dd class="field-even"><p>Save file for the COMSOL model with modal results.</p>
+</dd>
+<dt class="field-odd">Return dc:modalfreqs</dt>
+<dd class="field-odd"><p>Frequencies of the eigenmodes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrocomsol_createdummyoutput">
+<code class="sig-name descname">vibrocomsol_createdummyoutput</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrocomsol_createdummyoutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ProcessTrak step will create a dummy heating data file. This needs to
+exist to create the COMSOL model. The ProcessTrak step
+<code class="xref py py-func docutils literal notranslate"><span class="pre">vibrocomsol_calc_heating_welder</span></code> will populate this file with
+crack heating data. The ProcessTrak step
+<a class="reference internal" href="#vibrocomsol_heatflow_analysis_comsol" title="vibrocomsol_heatflow_analysis_comsol"><code class="xref py py-func docutils literal notranslate"><span class="pre">vibrocomsol_heatflow_analysis_comsol</span></code></a> will use the data to analyze
+heat flows.</p>
+<p>This ProcessTrak step is included in the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> software package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:dummy_heatingdata</dt>
+<dd class="field-even"><p>Output file for heating data. Heating data is
+the heat power of the crack as a function of time and position on crack.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrocomsol_entersweepfreqs">
+<code class="sig-name descname">vibrocomsol_entersweepfreqs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrocomsol_entersweepfreqs" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ProcessTrak step will show the results of the modal analysis and ask
+the user to specify the range of frequencies to be run by a later
+ProcessTrak step (<a class="reference internal" href="#vibrocomsol_sweep_analysis_comsol" title="vibrocomsol_sweep_analysis_comsol"><code class="xref py py-func docutils literal notranslate"><span class="pre">vibrocomsol_sweep_analysis_comsol</span></code></a>). If the
+returns of this ProcessTrak step are already defined in the experiment log
+(.xlp) then those predefined values are given as defaults for the user to
+accept. This would occur if this step has been run previously or if they
+are defined in the initial experiment log (.xlg).</p>
+<p>This ProcessTrak step is included in the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> software package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:modalfreqs</strong> – Frequencies of the eigenmodes.</p></li>
+<li><p><strong>dc:modalcalc_comsol</strong> – Save file for the COMSOL model with modal results.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:sweep_start_frequency</dt>
+<dd class="field-even"><p>Starting frequency for a sweep analysis.</p>
+</dd>
+<dt class="field-odd">Return dc:sweep_step_frequency</dt>
+<dd class="field-odd"><p>Frequency step for a sweep analysis.</p>
+</dd>
+<dt class="field-even">Return dc:sweep_end_frequency</dt>
+<dd class="field-even"><p>Ending frequency for a sweep analysis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrocomsol_setsweepfrequencies_comsol">
+<code class="sig-name descname">vibrocomsol_setsweepfrequencies_comsol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrocomsol_setsweepfrequencies_comsol" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ProcessTrak step will open COMSOL and set the parameters needed for
+the sweep analysis.</p>
+<p>This ProcessTrak step is included in the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> software package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+<li><p><strong>dc:model_comsol</strong> – Save file for the COMSOL model.</p></li>
+<li><p><strong>dc:sweep_start_frequency</strong> – Starting frequency for a sweep analysis.</p></li>
+<li><p><strong>dc:sweep_step_frequency</strong> – Frequency step for a sweep analysis.</p></li>
+<li><p><strong>dc:sweep_end_frequency</strong> – Ending frequency for a sweep analysis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:model_comsol_withsweepfrequencies</dt>
+<dd class="field-even"><p>Save file for the COMSOL model with sweep study results.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrocomsol_sweep_analysis_comsol">
+<code class="sig-name descname">vibrocomsol_sweep_analysis_comsol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrocomsol_sweep_analysis_comsol" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ProcessTrak step will open COMSOL, run the sweep analysis study, and
+save the results.</p>
+<p>The purpose of the frequency sweep is to do a more precise analysis than
+the modal analysis of specific candidate excitations over a range of
+frequencies. This is analogous to the narrowband sweeps that are performed
+in the vibrothermography process to identify the exact optimal excitation
+frequency for a particular resonant mode.</p>
+<p>Identify the dominant frequency from the crack strain magnitude and
+vibrometer plots, and make note of this frequency for use in the tone-burst
+analysis.</p>
+<p>This ProcessTrak step is included in the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> software package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+<li><p><strong>dc:model_comsol_withsweepfrequencies</strong> – Save file for the COMSOL model with sweep study results.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:sweep_spectrum</dt>
+<dd class="field-even"><p>Sweep spectrum image.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrocomsol_enterburstfreq">
+<code class="sig-name descname">vibrocomsol_enterburstfreq</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrocomsol_enterburstfreq" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ProcessTrak step will show the results of the modal analysis and the
+sweep analysis, and then ask the user to specify the single frequency to be
+run by a later ProcessTrak step
+(<a class="reference internal" href="#vibrocomsol_burst_analysis_comsol" title="vibrocomsol_burst_analysis_comsol"><code class="xref py py-func docutils literal notranslate"><span class="pre">vibrocomsol_burst_analysis_comsol</span></code></a>). If the returns of this
+ProcessTrak step are already defined in the experiment log (.xlp) then
+those values are given as defaults for the user to accept. This would occur
+if this step has been run previously or if they are defined in the initial
+experiment log (.xlg).</p>
+<p>This ProcessTrak step is included in the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> software package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:modalfreqs</strong> – Frequencies of the eigenmodes.</p></li>
+<li><p><strong>dc:modalcalc_comsol</strong> – Save file for the COMSOL model with modal results.</p></li>
+<li><p><strong>dc:sweep_spectrum</strong> – Sweep spectrum image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:excitation_frequency</dt>
+<dd class="field-even"><p>The frequency used to excite the specimen.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrocomsol_setburstfrequency_comsol">
+<code class="sig-name descname">vibrocomsol_setburstfrequency_comsol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrocomsol_setburstfrequency_comsol" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ProcessTrak step will open COMSOL and set the burst frequency to be
+used in the <a class="reference internal" href="#vibrocomsol_burst_analysis_comsol" title="vibrocomsol_burst_analysis_comsol"><code class="xref py py-func docutils literal notranslate"><span class="pre">vibrocomsol_burst_analysis_comsol</span></code></a> step.</p>
+<p>This ProcessTrak step is included in the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> software package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+<li><p><strong>dc:model_comsol</strong> – Save file for the COMSOL model.</p></li>
+<li><p><strong>dc:excitation_frequency</strong> – The frequency used to excite the specimen.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:model_comsol_withburstfrequency</dt>
+<dd class="field-even"><p>Save file for the COMSOL model with burst study parameters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrocomsol_burst_analysis_comsol">
+<code class="sig-name descname">vibrocomsol_burst_analysis_comsol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrocomsol_burst_analysis_comsol" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ProcessTrak step will open COMSOL, run the burst analysis study, and
+save the results. It will calculate the stress at the crack face, a
+critical component of the heating calculation. The burst frequency must be
+chosen from the results of the sweep analysis and injected into the model
+using the <a class="reference internal" href="#vibrocomsol_enterburstfreq" title="vibrocomsol_enterburstfreq"><code class="xref py py-func docutils literal notranslate"><span class="pre">vibrocomsol_enterburstfreq</span></code></a> and
+<a class="reference internal" href="#vibrocomsol_setburstfrequency_comsol" title="vibrocomsol_setburstfrequency_comsol"><code class="xref py py-func docutils literal notranslate"><span class="pre">vibrocomsol_setburstfrequency_comsol</span></code></a> processtrak steps.</p>
+<p>This ProcessTrak step is included in the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> software package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+<li><p><strong>dc:model_comsol_withburstfrequency</strong> – Save file for the COMSOL model with burst study parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:burstcalc_comsol</dt>
+<dd class="field-even"><p>Save file for the COMSOL model with burst study results.</p>
+</dd>
+<dt class="field-odd">Return dc:harmonicburst_normalstress</dt>
+<dd class="field-odd"><p>Stress in the model at the crack center, normal to the crack face. (Mode I)</p>
+</dd>
+<dt class="field-even">Return dc:harmonicburst_shearstressmajor</dt>
+<dd class="field-even"><p>Shear stress in the model at the crack center, in the crack semi-major direction. (Mode II)</p>
+</dd>
+<dt class="field-odd">Return dc:harmonicburst_shearstressminor</dt>
+<dd class="field-odd"><p>Shear stress in the model at the crack center, in the crack semi-minor direction. (Mode III)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrosim_calc_heating_singlefrequency">
+<code class="sig-name descname">vibrosim_calc_heating_singlefrequency</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrosim_calc_heating_singlefrequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ProcessTrak step will calculate the heat generated by the crack when
+the sample is subjected to the burst excitation.</p>
+<p>This ProcessTrak step is included in the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> software package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+<li><p><strong>dc:friction_coefficient</strong> – Friction coefficient of the crack surface.</p></li>
+<li><p><strong>dc:msqrtR</strong> – Crack asperity density.</p></li>
+<li><p><strong>dc:staticload</strong> – Static bending opening load on crack.</p></li>
+<li><p><strong>dc:tortuosity</strong> – Crack tortuosity, standard deviation of the crack trajectory.</p></li>
+<li><p><strong>dc:numdraws</strong> – Crack tortuosity is a statistical distribution, this
+parameter defines how many draws to take at each position along the crack
+for calculating the crack heating.</p></li>
+<li><p><strong>dc:YoungsModulus</strong> – Youngs modulus of the material.</p></li>
+<li><p><strong>dc:PoissonsRatio</strong> – Poissons Ratio of the material.</p></li>
+<li><p><strong>dc:YieldStrength</strong> – Yield strength of the material.</p></li>
+<li><p><strong>dc:Density</strong> – Density of the material.</p></li>
+<li><p><strong>dc:crack_model_normal</strong> – Which crack closure model to use for normal loading. <code class="docutils literal notranslate"><span class="pre">ModeI_throughcrack_CODformula</span></code> or <code class="docutils literal notranslate"><span class="pre">Tada_ModeI_CircularCrack_along_midline</span></code>.</p></li>
+<li><p><strong>dc:crack_model_shear</strong> – Which stick/slip model to use for shear loading. <code class="docutils literal notranslate"><span class="pre">Fabrikant_ModeII_CircularCrack_along_midline</span></code>, <code class="docutils literal notranslate"><span class="pre">ModeII_throughcrack_CSDformula</span></code>, or <code class="docutils literal notranslate"><span class="pre">ModeIII_throughcrack_CSDformula</span></code>.</p></li>
+<li><p><strong>dc:crack_model_shear_factor</strong> – Sensitivity factor for shear vs normal heating.</p></li>
+<li><p><strong>dc:exc_t0</strong> – Start of excitation envelope ramp-up.</p></li>
+<li><p><strong>dc:exc_t1</strong> – End of excitation envelope ramp-up.</p></li>
+<li><p><strong>dc:exc_t2</strong> – Start of excitation envelope ramp-down.</p></li>
+<li><p><strong>dc:exc_t3</strong> – End of excitation envelope ramp down.</p></li>
+<li><p><strong>dc:exc_t4</strong> – End of excitation vibration calculation.</p></li>
+<li><p><strong>dc:excitation_frequency</strong> – The frequency used to excite the specimen.</p></li>
+<li><p><strong>dc:harmonicburst_normalstress</strong> – Stress in the model at the crack center, normal to the crack face. (Mode I)</p></li>
+<li><p><strong>dc:harmonicburst_shearstressmajor</strong> – Shear stress in the model at the crack center, in the crack semi-major direction. (Mode II)</p></li>
+<li><p><strong>dc:harmonicburst_shearstressminor</strong> – Shear stress in the model at the crack center, in the crack semi-minor direction. (Mode III)</p></li>
+<li><p><strong>dc:crack_type_side1</strong> – Crack type of side1, can be <code class="docutils literal notranslate"><span class="pre">halfthrough</span></code> or <code class="docutils literal notranslate"><span class="pre">quarterpenny</span></code>.</p></li>
+<li><p><strong>dc:crack_type_side2</strong> – Crack type of side2, can be <code class="docutils literal notranslate"><span class="pre">halfthrough</span></code> or <code class="docutils literal notranslate"><span class="pre">quarterpenny</span></code>.</p></li>
+<li><p><strong>dc:crack_shearstress_axis</strong> – <code class="docutils literal notranslate"><span class="pre">major</span></code> (mode II) or <code class="docutils literal notranslate"><span class="pre">minor</span></code> (mode III) axis, defines the axis used to calculate shear heating.</p></li>
+<li><p><strong>dc:thickness</strong> – Thickness of the material at the crack, used only for <code class="docutils literal notranslate"><span class="pre">halfthrough</span></code> cracks.</p></li>
+<li><p><strong>dc:closurestate_side1</strong> – Closure state, side 1.</p></li>
+<li><p><strong>dc:closurestate_side2</strong> – Closure state, side 2.</p></li>
+<li><p><strong>dc:a_side1</strong> – Semimajor axis length of side 1.</p></li>
+<li><p><strong>dc:a_side2</strong> – Semimajor axis length of side 2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:heatpower</dt>
+<dd class="field-even"><p>Heat power vs crack location figure.</p>
+</dd>
+<dt class="field-odd">Return dc:heatingdata</dt>
+<dd class="field-odd"><p>A .tsv file where the four columns are time (s), radius (m), side 1 heating (W/m^2), and side 2 heating (W/m^2).</p>
+</dd>
+<dt class="field-even">Return dc:heatingtotalpower</dt>
+<dd class="field-even"><p>Total heating power of the crack.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrocomsol_heatflow_analysis_comsol">
+<code class="sig-name descname">vibrocomsol_heatflow_analysis_comsol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrocomsol_heatflow_analysis_comsol" title="Permalink to this definition">¶</a></dt>
+<dd><p>This Processtrak step will take the crack heating power data and project it
+along the crack in the COMSOL model. A heatflow study is performed to
+analyze the flow of heat in the specimen during the excitation time. The
+<code class="docutils literal notranslate"><span class="pre">vibro_heating_image</span></code> return is a snapshot of the heating data at the
+very end of the excitation.</p>
+<p>This ProcessTrak step is included in the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> software package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+<li><p><strong>dc:model_comsol</strong> – Save file for the COMSOL model.</p></li>
+<li><p><strong>dc:heatingdata</strong> – A .tsv file where the four columns are time (s), radius (m), side 1 heating (W/m^2), and side 2 heating (W/m^2).</p></li>
+<li><p><strong>dc:exc_t3</strong> – End of excitation envelope ramp down.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:vibro_heating_image</dt>
+<dd class="field-even"><p>Snapshot of the heating specimen.</p>
+</dd>
+<dt class="field-odd">Return dc:heatflow_comsol</dt>
+<dd class="field-odd"><p>Save file for the COMSOL model with heatflow study results.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrosim_calc_heating_welder">
+<code class="sig-name descname">vibrosim_calc_heating_welder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrosim_calc_heating_welder" title="Permalink to this definition">¶</a></dt>
+<dd><p>This processtrak step will call the angled friction model to determine the
+heating in each motion cycle as a function of position within the crack.</p>
+<p>This ProcessTrak step is included in the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> software package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+<li><p><strong>dc:friction_coefficient</strong> – Friction coefficient of the crack surface.</p></li>
+<li><p><strong>dc:msqrtR</strong> – Crack asperity density.</p></li>
+<li><p><strong>dc:staticload</strong> – Static bending opening load on crack.</p></li>
+<li><p><strong>dc:tortuosity</strong> – Crack tortuosity, standard deviation of the crack trajectory.</p></li>
+<li><p><strong>dc:numdraws</strong> – Crack tortuosity is a statistical distribution, this
+parameter defines how many draws to take at each position along the crack
+for calculating the crack heating.</p></li>
+<li><p><strong>dc:YoungsModulus</strong> – Youngs modulus of the material.</p></li>
+<li><p><strong>dc:PoissonsRatio</strong> – Poissons Ratio of the material.</p></li>
+<li><p><strong>dc:YieldStrength</strong> – Yield strength of the material.</p></li>
+<li><p><strong>dc:Density</strong> – Density of the material.</p></li>
+<li><p><strong>dc:crack_model_normal</strong> – Which crack closure model to use for normal loading. <code class="docutils literal notranslate"><span class="pre">ModeI_throughcrack_CODformula</span></code> or <code class="docutils literal notranslate"><span class="pre">Tada_ModeI_CircularCrack_along_midline</span></code>.</p></li>
+<li><p><strong>dc:crack_model_shear</strong> – Which stick/slip model to use for shear loading. <code class="docutils literal notranslate"><span class="pre">Fabrikant_ModeII_CircularCrack_along_midline</span></code>, <code class="docutils literal notranslate"><span class="pre">ModeII_throughcrack_CSDformula</span></code>, or <code class="docutils literal notranslate"><span class="pre">ModeIII_throughcrack_CSDformula</span></code>.</p></li>
+<li><p><strong>dc:crack_model_shear_factor</strong> – Sensitivity factor for shear vs normal heating.</p></li>
+<li><p><strong>dc:exc_t0</strong> – Start of excitation envelope ramp-up.</p></li>
+<li><p><strong>dc:exc_t4</strong> – End of excitation vibration calculation.</p></li>
+<li><p><strong>dc:motion</strong> – Table of motion of the tip position, contact force, crack stress, laser sense point, etc., resulting from the welder tip and specimen interaction. Multicolumn csv.</p></li>
+<li><p><strong>dc:crack_type_side1</strong> – Crack type of side1, can be <code class="docutils literal notranslate"><span class="pre">halfthrough</span></code> or <code class="docutils literal notranslate"><span class="pre">quarterpenny</span></code>.</p></li>
+<li><p><strong>dc:crack_type_side2</strong> – Crack type of side2, can be <code class="docutils literal notranslate"><span class="pre">halfthrough</span></code> or <code class="docutils literal notranslate"><span class="pre">quarterpenny</span></code>.</p></li>
+<li><p><strong>dc:crack_shearstress_axis</strong> – <code class="docutils literal notranslate"><span class="pre">major</span></code> (mode II) or <code class="docutils literal notranslate"><span class="pre">minor</span></code> (mode III) axis, defines the axis used to calculate shear heating.</p></li>
+<li><p><strong>dc:thickness</strong> – Thickness of the material at the crack, used only for <code class="docutils literal notranslate"><span class="pre">halfthrough</span></code> cracks.</p></li>
+<li><p><strong>dc:closurestate_side1</strong> – Closure state, side 1.</p></li>
+<li><p><strong>dc:closurestate_side2</strong> – Closure state, side 2.</p></li>
+<li><p><strong>dc:a_side1</strong> – Semimajor axis length of side 1.</p></li>
+<li><p><strong>dc:a_side2</strong> – Semimajor axis length of side 2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:heatingdata</dt>
+<dd class="field-even"><p>A .tsv file where the four columns are time (s), radius (m), side 1 heating (W/m^2), and side 2 heating (W/m^2).</p>
+</dd>
+<dt class="field-odd">Return dc:heatingtotalpower</dt>
+<dd class="field-odd"><p>Total heating power of the crack.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrosim_eval_closure_state_from_tip_positions">
+<code class="sig-name descname">vibrosim_eval_closure_state_from_tip_positions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrosim_eval_closure_state_from_tip_positions" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ProcessTrak step is used in vibrosim to evaluate crack closure state
+from crack tip positions given in an XML element. It is provided by the
+<code class="docutils literal notranslate"><span class="pre">crackclosuresim2</span></code> package.</p>
+<p>The crack closure state is given as four arrays interpreted as text
+within XML elements of the experiment log,
+e.g:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">dc</span><span class="p">:</span><span class="n">reff_side1</span> <span class="n">dcv</span><span class="p">:</span><span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span> <span class="n">dcv</span><span class="p">:</span><span class="n">arraystorageorder</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">dcv</span><span class="p">:</span><span class="n">arrayshape</span><span class="o">&gt;</span><span class="mi">9</span><span class="o">&lt;/</span><span class="n">dcv</span><span class="p">:</span><span class="n">arrayshape</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">dcv</span><span class="p">:</span><span class="n">arraydata</span><span class="o">&gt;</span>
+    <span class="o">.</span><span class="mf">5e-3</span> <span class="o">.</span><span class="mf">7e-3</span> <span class="o">.</span><span class="mf">9e-3</span> <span class="mf">1.05e-3</span> <span class="mf">1.2e-3</span> <span class="mf">1.33e-3</span> <span class="mf">1.45e-3</span> <span class="mf">1.56e-3</span> <span class="mf">1.66e-3</span>
+  <span class="o">&lt;/</span><span class="n">dcv</span><span class="p">:</span><span class="n">arraydata</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">dc</span><span class="p">:</span><span class="n">reff_side1</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dc</span><span class="p">:</span><span class="n">seff_side1</span> <span class="n">dcv</span><span class="p">:</span><span class="n">units</span><span class="o">=</span><span class="s2">&quot;Pa&quot;</span> <span class="n">dcv</span><span class="p">:</span><span class="n">arraystorageorder</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">dcv</span><span class="p">:</span><span class="n">arrayshape</span><span class="o">&gt;</span><span class="mi">9</span><span class="o">&lt;/</span><span class="n">dcv</span><span class="p">:</span><span class="n">arrayshape</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">dcv</span><span class="p">:</span><span class="n">arraydata</span><span class="o">&gt;</span>
+    <span class="mf">0.0</span> <span class="mf">50e6</span> <span class="mf">100e6</span> <span class="mf">150e6</span> <span class="mf">200e6</span> <span class="mf">250e6</span> <span class="mf">300e6</span> <span class="mf">350e6</span> <span class="mf">400e6</span>
+  <span class="o">&lt;/</span><span class="n">dcv</span><span class="p">:</span><span class="n">arraydata</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">dc</span><span class="p">:</span><span class="n">seff_side1</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">dc</span><span class="p">:</span><span class="n">reff_side2</span> <span class="n">dcv</span><span class="p">:</span><span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span> <span class="n">dcv</span><span class="p">:</span><span class="n">arraystorageorder</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">dcv</span><span class="p">:</span><span class="n">arrayshape</span><span class="o">&gt;</span><span class="mi">9</span><span class="o">&lt;/</span><span class="n">dcv</span><span class="p">:</span><span class="n">arrayshape</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">dcv</span><span class="p">:</span><span class="n">arraydata</span><span class="o">&gt;</span>
+    <span class="o">.</span><span class="mf">5e-3</span> <span class="o">.</span><span class="mf">7e-3</span> <span class="o">.</span><span class="mf">9e-3</span> <span class="mf">1.05e-3</span> <span class="mf">1.2e-3</span> <span class="mf">1.33e-3</span> <span class="mf">1.45e-3</span> <span class="mf">1.56e-3</span> <span class="mf">1.66e-3</span>
+  <span class="o">&lt;/</span><span class="n">dcv</span><span class="p">:</span><span class="n">arraydata</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">dc</span><span class="p">:</span><span class="n">reff_side2</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dc</span><span class="p">:</span><span class="n">seff_side2</span> <span class="n">dcv</span><span class="p">:</span><span class="n">units</span><span class="o">=</span><span class="s2">&quot;Pa&quot;</span> <span class="n">dcv</span><span class="p">:</span><span class="n">arraystorageorder</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">dcv</span><span class="p">:</span><span class="n">arrayshape</span><span class="o">&gt;</span><span class="mi">9</span><span class="o">&lt;/</span><span class="n">dcv</span><span class="p">:</span><span class="n">arrayshape</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">dcv</span><span class="p">:</span><span class="n">arraydata</span><span class="o">&gt;</span>
+    <span class="mf">0.0</span> <span class="mf">50e6</span> <span class="mf">100e6</span> <span class="mf">150e6</span> <span class="mf">200e6</span> <span class="mf">250e6</span> <span class="mf">300e6</span> <span class="mf">350e6</span> <span class="mf">400e6</span>
+  <span class="o">&lt;/</span><span class="n">dcv</span><span class="p">:</span><span class="n">arraydata</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">dc</span><span class="p">:</span><span class="n">seff_side2</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">reff</span></code> (effective tip radius) values are given in meters and the
+<code class="docutils literal notranslate"><span class="pre">seff</span></code> (corresponding normal stress) values are given in Pascals.
+The radius values should be listed in increasing order. The last
+radius value on each side (side1 - left or side2 - right) should
+correspond to the length of that side of the crack.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+<li><p><strong>dc:YoungsModulus</strong> – Youngs modulus of the material.</p></li>
+<li><p><strong>dc:PoissonsRatio</strong> – Poissons Ratio of the material.</p></li>
+<li><p><strong>dc:YieldStrength</strong> – Yield strength of the material.</p></li>
+<li><p><strong>dc:reff_side1</strong> – Effective tip radius array of crack side 1.</p></li>
+<li><p><strong>dc:seff_side1</strong> – Normal stress corresponding to tip radius array, side 1.</p></li>
+<li><p><strong>dc:reff_side2</strong> – Effective tip radius of crack side 2.</p></li>
+<li><p><strong>dc:seff_side2</strong> – Normal stress corresponding to tip radius array, side 2.</p></li>
+<li><p><strong>dc:crack_model_normal</strong> – Which crack closure model to use for normal loading. <code class="docutils literal notranslate"><span class="pre">ModeI_throughcrack_CODformula</span></code> or <code class="docutils literal notranslate"><span class="pre">Tada_ModeI_CircularCrack_along_midline</span></code>.</p></li>
+<li><p><strong>dc:crack_model_shear</strong> – Which stick/slip model to use for shear loading. <code class="docutils literal notranslate"><span class="pre">Fabrikant_ModeII_CircularCrack_along_midline</span></code>, <code class="docutils literal notranslate"><span class="pre">ModeII_throughcrack_CSDformula</span></code>, or <code class="docutils literal notranslate"><span class="pre">ModeIII_throughcrack_CSDformula</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:closureplot_side1</dt>
+<dd class="field-even"><p>Plot of the closure state, side 1.</p>
+</dd>
+<dt class="field-odd">Return dc:closureplot_side2</dt>
+<dd class="field-odd"><p>Plot of the closure state, side 2.</p>
+</dd>
+<dt class="field-even">Return dc:closurestate_side1</dt>
+<dd class="field-even"><p>Closure state, side 1.</p>
+</dd>
+<dt class="field-odd">Return dc:closurestate_side2</dt>
+<dd class="field-odd"><p>Closure state, side 2.</p>
+</dd>
+<dt class="field-even">Return dc:a_side1</dt>
+<dd class="field-even"><p>Semimajor axis length of side 1.</p>
+</dd>
+<dt class="field-odd">Return dc:a_side2</dt>
+<dd class="field-odd"><p>Semimajor axis length of side 2.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrosim_plot_welder_motion">
+<code class="sig-name descname">vibrosim_plot_welder_motion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrosim_plot_welder_motion" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ProcessTrak step will plot the welder motion.</p>
+<p>Provided by the <code class="docutils literal notranslate"><span class="pre">VibroSim_WelderModel</span></code> package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+<li><p><strong>dc:motion</strong> – Table of motion of the tip position, contact force, crack stress, laser sense point, etc., resulting from the welder tip and specimen interaction. Multicolumn csv.</p></li>
+<li><p><strong>dc:exc_t0</strong> – Start of excitation envelope ramp-up.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return plots</dt>
+<dd class="field-even"><p>Welder motion plots.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrosim_simulate_welder">
+<code class="sig-name descname">vibrosim_simulate_welder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrosim_simulate_welder" title="Permalink to this definition">¶</a></dt>
+<dd><p>The processtrak step takes the desired weld profile and the pneumatic force
+and dynamic behavior of the welder and specimen and generates a motion
+table. It generates this table through a time based integration simulation
+of the repeated impacts of the welder.</p>
+<p>This step can be accelerated through the use of OpenCL. To use the GPU the
+device information needs to be passed to the processtrak step in the
+<code class="docutils literal notranslate"><span class="pre">.prx</span></code> file. Look in the <code class="docutils literal notranslate"><span class="pre">cantilever_example.prx</span></code> file for an example.</p>
+<p>Provided by the <code class="docutils literal notranslate"><span class="pre">VibroSim_WelderModel</span></code> package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+<li><p><strong>dc:dynamicmodel</strong> – Time-domain specimen stress and motion at transducer contact, laser, and crack locations</p></li>
+<li><p><strong>dc:exc_t0</strong> – Start of excitation envelope ramp-up.</p></li>
+<li><p><strong>dc:exc_t1</strong> – End of excitation envelope ramp-up.</p></li>
+<li><p><strong>dc:exc_t2</strong> – Start of excitation envelope ramp-down.</p></li>
+<li><p><strong>dc:exc_t3</strong> – End of excitation envelope ramp down.</p></li>
+<li><p><strong>dc:exc_t4</strong> – End of excitation vibration calculation.</p></li>
+<li><p><strong>dc:mass_of_welder_and_slider</strong> – Assumed mass of welder assembly.</p></li>
+<li><p><strong>dc:pneumatic_force</strong> – Pneumatic force behind the welder.</p></li>
+<li><p><strong>dc:welder_elec_ampl</strong> – Electrical excitation amplitude going into the welder. Not a calibrated value.</p></li>
+<li><p><strong>dc:YoungsModulus</strong> – Youngs modulus of the material.</p></li>
+<li><p><strong>dc:PoissonsRatio</strong> – Poissons Ratio of the material.</p></li>
+<li><p><strong>dc:welder_spring_constant</strong> – The springiness of the welder mounts.</p></li>
+<li><p><strong>dc:R_contact</strong> – Welder tip assumed Hertzian contact radius.</p></li>
+<li><p><strong>dc:welder_elec_freq</strong> – Frequency of the electrical welder excitation.</p></li>
+<li><p><strong>dc:contact_model_timestep</strong> – Timestep used in the contact model.</p></li>
+<li><p><strong>dc:gpu_device_priority_list</strong> – Prioritized list of gpus to use in place of cpu.</p></li>
+<li><p><strong>dc:gpu_precision</strong> – <code class="docutils literal notranslate"><span class="pre">single</span></code> or <code class="docutils literal notranslate"><span class="pre">double</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:motion</dt>
+<dd class="field-even"><p>Table of motion of the tip position, contact force, crack stress, laser sense point, etc., resulting from the welder tip and specimen interaction. Multicolumn csv.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrosim_process_multisweep">
+<code class="sig-name descname">vibrosim_process_multisweep</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrosim_process_multisweep" title="Permalink to this definition">¶</a></dt>
+<dd><p>This processtrak step will process the freq_band_analysis output to create
+a time-domain waveform. This time domain waveform, generated from the
+multiple sweeps of relevant frequencies to the system, represents the
+impulse response of the system.</p>
+<p>Provided by the <code class="docutils literal notranslate"><span class="pre">VibroSim_WelderModel</span></code> package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+<li><p><strong>dc:seg1_xducercontactprobe_displ</strong> – Transducer contact probe displacement.</p></li>
+<li><p><strong>dc:seg1_xducercontactprobe_vel</strong> – Transducer contact probe velocity.</p></li>
+<li><p><strong>dc:seg1_laser_displ</strong> – Displacement at laser vibrometer spot.</p></li>
+<li><p><strong>dc:seg1_laser_vel</strong> – Velocity at laser vibrometer spot.</p></li>
+<li><p><strong>dc:seg1_crackcenterstress</strong> – Crack center stress.</p></li>
+<li><p><strong>dc:seg2_xducercontactprobe_displ</strong> – Transducer contact probe displacement.</p></li>
+<li><p><strong>dc:seg2_xducercontactprobe_vel</strong> – Transducer contact probe velocity.</p></li>
+<li><p><strong>dc:seg2_laser_displ</strong> – Displacement at laser vibrometer spot.</p></li>
+<li><p><strong>dc:seg2_laser_vel</strong> – Velocity at laser vibrometer spot.</p></li>
+<li><p><strong>dc:seg2_crackcenterstress</strong> – Crack center stress.</p></li>
+<li><p><strong>dc:seg3_xducercontactprobe_displ</strong> – Transducer contact probe displacement.</p></li>
+<li><p><strong>dc:seg3_xducercontactprobe_vel</strong> – Transducer contact probe velocity.</p></li>
+<li><p><strong>dc:seg3_laser_displ</strong> – Displacement at laser vibrometer spot.</p></li>
+<li><p><strong>dc:seg3_laser_vel</strong> – Velocity at laser vibrometer spot.</p></li>
+<li><p><strong>dc:seg3_crackcenterstress</strong> – Crack center stress.</p></li>
+<li><p><strong>dc:seg4_xducercontactprobe_displ</strong> – Transducer contact probe displacement.</p></li>
+<li><p><strong>dc:seg4_xducercontactprobe_vel</strong> – Transducer contact probe velocity.</p></li>
+<li><p><strong>dc:seg4_laser_displ</strong> – Displacement at laser vibrometer spot.</p></li>
+<li><p><strong>dc:seg4_laser_vel</strong> – Velocity at laser vibrometer spot.</p></li>
+<li><p><strong>dc:seg4_crackcenterstress</strong> – Crack center stress.</p></li>
+<li><p><strong>dc:endcrop</strong> – The amount of time in seconds to crop off the generated time domain waveforms to remove the anticausal portion of the signal.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:dynamicmodel</dt>
+<dd class="field-even"><p>Time-domain specimen stress and motion at transducer contact, laser, and crack locations</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrocomsol_multisweep_seg_analysis_comsol">
+<code class="sig-name descname">vibrocomsol_multisweep_seg_analysis_comsol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrocomsol_multisweep_seg_analysis_comsol" title="Permalink to this definition">¶</a></dt>
+<dd><p>This processtrak step will run one of the multiple sweep analyses
+prescribed by <a class="reference internal" href="#vibrosim_optimize_freqbands" title="vibrosim_optimize_freqbands"><code class="xref py py-func docutils literal notranslate"><span class="pre">vibrosim_optimize_freqbands</span></code></a>.</p>
+<p>Provided by the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+<li><p><strong>dc:model_comsol_withsegboundaries</strong> – Save file for the COMSOL model with segment boundaries.</p></li>
+<li><p><strong>segnum_int</strong> – Segment number.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:segX_xducercontactprobe_displ</dt>
+<dd class="field-even"><p>Transducer contact probe displacement.</p>
+</dd>
+<dt class="field-odd">Return dc:segX_xducercontactprobe_vel</dt>
+<dd class="field-odd"><p>Transducer contact probe velocity.</p>
+</dd>
+<dt class="field-even">Return dc:segX_laser_displ</dt>
+<dd class="field-even"><p>Displacement at laser vibrometer spot.</p>
+</dd>
+<dt class="field-odd">Return dc:segX_laser_vel</dt>
+<dd class="field-odd"><p>Velocity at laser vibrometer spot.</p>
+</dd>
+<dt class="field-even">Return dc:segX_crackcenterstress</dt>
+<dd class="field-even"><p>Crack center stress.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrocomsol_set_freqbands_comsol">
+<code class="sig-name descname">vibrocomsol_set_freqbands_comsol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrocomsol_set_freqbands_comsol" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ProcessTrak step opens a COMSOL file and sets the frequency bands for the multisweep study.</p>
+<p>Provided by the <code class="docutils literal notranslate"><span class="pre">VibroSim_Simulator</span></code> package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:dest</strong> – Results output folder.</p></li>
+<li><p><strong>dc:measident</strong> – Measurement identifier.</p></li>
+<li><p><strong>dc:model_comsol</strong> – Save file for the COMSOL model.</p></li>
+<li><p><strong>dc:freqband_seg1_start</strong> – Starting frequency of a frequency band.</p></li>
+<li><p><strong>dc:freqband_seg1_step</strong> – Step frequency of a frequency band.</p></li>
+<li><p><strong>dc:freqband_seg1_end</strong> – End frequency of a frequency band.</p></li>
+<li><p><strong>dc:freqband_seg2_start</strong> – Starting frequency of a frequency band.</p></li>
+<li><p><strong>dc:freqband_seg2_step</strong> – Step frequency of a frequency band.</p></li>
+<li><p><strong>dc:freqband_seg2_end</strong> – End frequency of a frequency band.</p></li>
+<li><p><strong>dc:freqband_seg3_start</strong> – Starting frequency of a frequency band.</p></li>
+<li><p><strong>dc:freqband_seg3_step</strong> – Step frequency of a frequency band.</p></li>
+<li><p><strong>dc:freqband_seg3_end</strong> – End frequency of a frequency band.</p></li>
+<li><p><strong>dc:freqband_seg4_start</strong> – Starting frequency of a frequency band.</p></li>
+<li><p><strong>dc:freqband_seg4_step</strong> – Step frequency of a frequency band.</p></li>
+<li><p><strong>dc:freqband_seg4_end</strong> – End frequency of a frequency band.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:model_comsol_withsegboundaries</dt>
+<dd class="field-even"><p>Save file for the COMSOL model with segment boundaries.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="vibrosim_optimize_freqbands">
+<code class="sig-name descname">vibrosim_optimize_freqbands</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vibrosim_optimize_freqbands" title="Permalink to this definition">¶</a></dt>
+<dd><p>This ProcessTrak step optimizes the frequency bands for the ProcessTrak
+step <a class="reference internal" href="#vibrocomsol_multisweep_seg_analysis_comsol" title="vibrocomsol_multisweep_seg_analysis_comsol"><code class="xref py py-func docutils literal notranslate"><span class="pre">vibrocomsol_multisweep_seg_analysis_comsol</span></code></a>.</p>
+<p>Run this on output of modal analysis to interpret the modal decay
+coefficients and plan a three or four segment frequency domain calculation
+that will be invertable to a time-domain response.</p>
+<p>This step prepares the model for a frequency sweep taken in multiple parts
+with varying time steps. The frequency bands are chosen to include the
+modes present in the modal analysis, and the frequency step is chosen to
+avoid aliasing. A large frequency step can be used for segments with modes
+that are expected to damp quickly, and small frequency steps can be used
+for segments with modes that damp slowly. Thereby removing the need for a
+small frequency step across the whole spectrum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dc:modalfreqs</strong> – Frequencies of the eigenmodes.</p></li>
+<li><p><strong>dc:temporal_decay_divisor</strong> – The factor by which the time domain impulse response should decay within the calculation period. Residual magnitudes past the calculation period implicitly wrap back and overlap with the impulse response, acting as interference.</p></li>
+<li><p><strong>dc:spectral_decay_divisor</strong> – The factor by which resonances outside a segment under construction must decay to by a segment boundary in order to be ignored when constructing the segment.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return dc:freqband_seg1_start</dt>
+<dd class="field-even"><p>Starting frequency of a frequency band.</p>
+</dd>
+<dt class="field-odd">Return dc:freqband_seg1_step</dt>
+<dd class="field-odd"><p>Step frequency of a frequency band.</p>
+</dd>
+<dt class="field-even">Return dc:freqband_seg1_end</dt>
+<dd class="field-even"><p>End frequency of a frequency band.</p>
+</dd>
+<dt class="field-odd">Return dc:freqband_seg2_start</dt>
+<dd class="field-odd"><p>Starting frequency of a frequency band.</p>
+</dd>
+<dt class="field-even">Return dc:freqband_seg2_step</dt>
+<dd class="field-even"><p>Step frequency of a frequency band.</p>
+</dd>
+<dt class="field-odd">Return dc:freqband_seg2_end</dt>
+<dd class="field-odd"><p>End frequency of a frequency band.</p>
+</dd>
+<dt class="field-even">Return dc:freqband_seg3_start</dt>
+<dd class="field-even"><p>Starting frequency of a frequency band.</p>
+</dd>
+<dt class="field-odd">Return dc:freqband_seg3_step</dt>
+<dd class="field-odd"><p>Step frequency of a frequency band.</p>
+</dd>
+<dt class="field-even">Return dc:freqband_seg3_end</dt>
+<dd class="field-even"><p>End frequency of a frequency band.</p>
+</dd>
+<dt class="field-odd">Return dc:freqband_seg4_start</dt>
+<dd class="field-odd"><p>Starting frequency of a frequency band.</p>
+</dd>
+<dt class="field-even">Return dc:freqband_seg4_step</dt>
+<dd class="field-even"><p>Step frequency of a frequency band.</p>
+</dd>
+<dt class="field-odd">Return dc:freqband_seg4_end</dt>
+<dd class="field-odd"><p>End frequency of a frequency band.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">VibroSim</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">VibroSim Simulator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#summary-of-vibrosim-demo3-files">Summary of vibrosim_demo3 files</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ProcessTrak Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explog_parameters.html">Experiment log parameters</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="tutorial.html" title="previous chapter">Tutorial</a></li>
+      <li>Next: <a href="explog_parameters.html" title="next chapter">Experiment log parameters</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Iowa State University.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/processtrak_steps.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
