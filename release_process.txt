@@ -5,7 +5,7 @@ Release process
  * Update VibroSim_COMSOL version in .prj file; commit; Build VibroSim_COMSOL .mltbx
  * Build VibroSim_COMSOL docs -> update this repo
  * Build VibroSim_Simulator docs -> update this repo
- * Tag each repo with VibroSim_<VERSION> e.g. VibroSim_1.0.0 or VibroSim_1.0.0-rc2
+ * Tag each repo with VibroSim-<VERSION> e.g. VibroSim-1.0.0 or VibroSim-1.0.0-rc2
  * Run VibroSim_build_release script. 
  * Manually add VibroSim_COMSOL .mltbx to generated archve
  * Distribute archive as appropriate. 
