@@ -7,7 +7,8 @@
 # NOTE: This assumes the source trees are all
 # in /usr/local/src on ahab.cnde.iastate.edu and
 # generates archive with .git folders with upstream 
-# marked as ssh://ahab.cnde.iastate.edu//usr/local/src/<repo>
+# marked as github or ssh://ahab.cnde.iastate.edu//usr/local/src/<repo>
+# depending on the REPO_ROOT variables below. 
 
 # Consider pre-generating a .mtblx of VibroSim_COMSOL; when doing this
 # pre-adjust the version in the .prj to match the tagged version. 
@@ -15,6 +16,12 @@
 export VERSION=$1
 
 export VIBROSIM_REPOS="angled_friction_model closure_measurements crackclosuresim2 crackheat_surrogate2 tortuosity_tracing vibro_estparam VibroSim_COMSOL VibroSim_Simulator VibroSim_WelderModel crack_heatflow limatix heatsim2 VibroSim_Release"
+
+#export REPO_ROOT=ssh://ahab.cnde.iastate.edu//usr/local/src/
+export REPO_ROOT=https://github.com/VibroSim
+
+#export REPO_ROOT_LIMATIX=ssh://ahab.cnde.iastate.edu//usr/local/src/limatix
+export REPO_ROOT_LIMATIX=https://github.com/limatix
 
 if test `hostname` != ahab.cnde.iastate.edu ; then 
   echo 'WARNING: Building VibroSim release from incorrect host'
@@ -44,13 +51,13 @@ cd /tmp/VibroSim-$VERSION
 echo $VIBROSIM_REPOS
 
 for repo in $VIBROSIM_REPOS ; do 
-  git clone ssh://ahab.cnde.iastate.edu//usr/local/src/$repo 
+  git clone $REPO_ROOT/$repo 
 done
 
 # handle limatix sub-repos
-git clone ssh://ahab.cnde.iastate.edu//usr/local/src/limatix/limatix/canonicalize_path limatix/limatix/canonicalize_path
+git clone $REPO_ROOT_LIMATIX/limatix/canonicalize_path limatix/limatix/canonicalize_path
 
-git clone ssh://ahab.cnde.iastate.edu//usr/local/src/limatix/limatix/dc_lxml_treesync limatix/limatix/dc_lxml_treesync
+git clone $REPO_ROOT_LIMATIX/limatix/dc_lxml_treesync limatix/limatix/dc_lxml_treesync
 
 for repo in $VIBROSIM_REPOS ; do 
   cd /tmp/VibroSim-$VERSION/$repo
