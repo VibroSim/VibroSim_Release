@@ -15,13 +15,16 @@
 
 export VERSION=$1
 
-export VIBROSIM_REPOS="angled_friction_model closure_measurements crackclosuresim2 crackheat_surrogate2 tortuosity_tracing vibro_estparam VibroSim_COMSOL VibroSim_Simulator VibroSim_WelderModel crack_heatflow limatix heatsim2 VibroSim_Release"
+export VIBROSIM_REPOS="angled_friction_model closure_measurements crackclosuresim2 crackheat_surrogate2 tortuosity_tracing vibro_estparam VibroSim_COMSOL VibroSim_Simulator VibroSim_WelderModel crack_heatflow VibroSim_Release"
 
 #export REPO_ROOT=ssh://ahab.cnde.iastate.edu//usr/local/src/
 export REPO_ROOT=https://github.com/VibroSim
 
-#export REPO_ROOT_LIMATIX=ssh://ahab.cnde.iastate.edu//usr/local/src/limatix
+#export REPO_ROOT_LIMATIX=ssh://ahab.cnde.iastate.edu//usr/local/src
 export REPO_ROOT_LIMATIX=https://github.com/limatix
+
+#export REPO_ROOT_HEATSIM2=ssh://ahab.cnde.iastate.edu//usr/local/src
+export REPO_ROOT_HEATSIM2=https://github.com/isuthermography
 
 if test `hostname` != ahab.cnde.iastate.edu ; then 
   echo 'WARNING: Building VibroSim release from incorrect host'
@@ -54,10 +57,13 @@ for repo in $VIBROSIM_REPOS ; do
   git clone $REPO_ROOT/$repo 
 done
 
-# handle limatix sub-repos
-git clone $REPO_ROOT_LIMATIX/limatix/canonicalize_path limatix/limatix/canonicalize_path
+git clone $REPO_ROOT_LIMATIX/limatix
+git clone $REPO_ROOT_HEATSIM2/heatsim2
 
-git clone $REPO_ROOT_LIMATIX/limatix/dc_lxml_treesync limatix/limatix/dc_lxml_treesync
+# handle limatix sub-repos
+git clone $REPO_ROOT_LIMATIX/limatix/limatix/canonicalize_path limatix/limatix/canonicalize_path
+
+git clone $REPO_ROOT_LIMATIX/limatix/limatix/dc_lxml_treesync limatix/limatix/dc_lxml_treesync
 
 for repo in $VIBROSIM_REPOS ; do 
   cd /tmp/VibroSim-$VERSION/$repo
