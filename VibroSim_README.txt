@@ -5,6 +5,14 @@ VibroSim is a simulator for vibrothermography nondestructive evaluation.
 This archive includes all components of VibroSim, many of which you 
 are unlikely to need depending on your application. 
 
+PLEASE NOTE THAT VIBROSIM MAY NOT HAVE BEEN ADEQUATELY 
+VALIDATED, THE NUMBERS BUILT INTO IT ALMOST CERTAINLY 
+DO NOT APPLY TO YOUR VIBROTHERMOGRAPHY PROCESS. ITS OUTPUT 
+CANNOT BE TRUSTED AND IS NOT SUITABLE FOR ENGINEERING 
+REQUIREMENTS WITHOUT APPLICATION- AND PROCESS-SPECIFIC 
+VALIDATION. 
+
+
 Quick Start
 -----------
 The primary dependencies you will need will be MATLAB and COMSOL 
@@ -22,7 +30,7 @@ directory. In order to use it, you will also need VibroSim_COMSOL (either the
 .mltbx installed into MATLAB or the VibroSim_COMSOL/VibroSim_COMSOL/m_files
 directory added to your MATLABPATH). You will most likely also need the 
 following other packages from this archive installed into your Python 
-environment: 
+environment (other modules are generally optional): 
   * angled_friction_model
   * crackclosuresim2 (requires your platform compiler -- see docs)
   * VibroSim_WelderModel
@@ -68,6 +76,8 @@ State University
 This material is based upon work supported by the Department of the
 Air Force under Awards No. FD20301933322 and FD20301933313, Air Force
 SBIRs to Core Parts, LLC.
+
+AFRL Public Release Case #AFRL-2021-3480
 
 Any opinions, findings, and conclusions or recommendations expressed
 in this material are those of the author(s) and do not necessarily
