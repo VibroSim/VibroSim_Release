@@ -73,6 +73,7 @@ done
 
 # Copy VibroSim_README.txt from VibroSim_Release archive
 cp /usr/local/src/VibroSim_Release/VibroSim_README.txt /tmp/VibroSim-$VERSION/README.txt
+cp /usr/local/src/VibroSim_Release/LICENSE.txt /tmp/VibroSim-$VERSION/LICENSE.txt
 
 cp -a /usr/local/src/VibroSim_Release/docs /tmp/VibroSim-$VERSION/
 
